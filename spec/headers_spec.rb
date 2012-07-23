@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "ApiAuth::Headers" do
+describe "AuthenticatedApi::Headers" do
   
   CANONICAL_STRING = "text/plain,e59ff97941044f85df5297e1c302d260,/resource.xml?foo=bar&bar=foo,Mon, 23 Jan 1984 03:29:56 GMT"
 
@@ -11,7 +11,7 @@ describe "ApiAuth::Headers" do
         'content-type' => 'text/plain', 
         'content-md5' => 'e59ff97941044f85df5297e1c302d260',
         'date' => "Mon, 23 Jan 1984 03:29:56 GMT")
-      @headers = ApiAuth::Headers.new(@request)
+      @headers = AuthenticatedApi::Headers.new(@request)
     end
     
     it "should generate the proper canonical string" do
@@ -27,7 +27,7 @@ describe "ApiAuth::Headers" do
       @request = Net::HTTP::Put.new("/resource.xml?foo=bar&bar=foo", 
         'content-type' => 'text/plain', 
         'content-md5' => 'e59ff97941044f85df5297e1c302d260')
-      ApiAuth.sign!(@request, "some access id", "some secret key")
+      AuthenticatedApi.sign!(@request, "some access id", "some secret key")
       @request['DATE'].should_not be_nil
     end
   
@@ -42,7 +42,7 @@ describe "ApiAuth::Headers" do
       @request = RestClient::Request.new(:url => "/resource.xml?foo=bar&bar=foo", 
         :headers => headers,
         :method => :put)
-      @headers = ApiAuth::Headers.new(@request)
+      @headers = AuthenticatedApi::Headers.new(@request)
     end
     
     it "should generate the proper canonical string" do
@@ -60,7 +60,7 @@ describe "ApiAuth::Headers" do
       @request = RestClient::Request.new(:url => "/resource.xml?foo=bar&bar=foo", 
         :headers => headers,
         :method => :put)
-      ApiAuth.sign!(@request, "some access id", "some secret key")
+      AuthenticatedApi.sign!(@request, "some access id", "some secret key")
       @request.headers['DATE'].should_not be_nil
     end
   
@@ -75,7 +75,7 @@ describe "ApiAuth::Headers" do
       @request = Curl::Easy.new("/resource.xml?foo=bar&bar=foo") do |curl|
         curl.headers = headers
       end
-      @headers = ApiAuth::Headers.new(@request)
+      @headers = AuthenticatedApi::Headers.new(@request)
     end
     
     it "should generate the proper canonical string" do
@@ -93,7 +93,7 @@ describe "ApiAuth::Headers" do
       @request = Curl::Easy.new("/resource.xml?foo=bar&bar=foo") do |curl|
         curl.headers = headers
       end
-      ApiAuth.sign!(@request, "some access id", "some secret key")
+      AuthenticatedApi.sign!(@request, "some access id", "some secret key")
       @request.headers['DATE'].should_not be_nil
     end
   

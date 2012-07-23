@@ -1,4 +1,4 @@
-module ApiAuth
+module AuthenticatedApi
   
   # Builds the canonical string given a request object.
   class Headers
@@ -44,7 +44,7 @@ module ApiAuth
     end
     
     # Sets the request's authorization header with the passed in value.
-    # The header should be the ApiAuth HMAC signature.
+    # The header should be the AuthenticatedApi HMAC signature.
     #
     # This will return the original request object with the signed Authorization
     # header already in place.

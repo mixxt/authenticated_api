@@ -1,7 +1,7 @@
 require "bundler/setup"
 Bundler.require
 
-require 'api_auth'
+require 'authenticated_api'
 
 ENV['RACK_ENV'] = 'test'
 

@@ -6,7 +6,7 @@
 # signature on the server side. If your server resources are implemented as a 
 # Rails ActiveResource, it will integrate with that. It will even generate the 
 # secret keys necessary for your clients to sign their requests.
-module ApiAuth
+module AuthenticatedApi
   
   class << self
     
@@ -78,4 +78,4 @@ module ApiAuth
     
   end # class methods
   
-end # ApiAuth
+end # AuthenticatedApi

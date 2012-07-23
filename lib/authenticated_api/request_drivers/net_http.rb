@@ -1,4 +1,4 @@
-module ApiAuth
+module AuthenticatedApi
   
   module RequestDrivers # :nodoc:
   

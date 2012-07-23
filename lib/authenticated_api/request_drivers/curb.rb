@@ -1,10 +1,10 @@
-module ApiAuth
+module AuthenticatedApi
   
   module RequestDrivers # :nodoc:
   
-    class RestClientRequest # :nodoc:
+    class CurbRequest # :nodoc:
       
-      include ApiAuth::Helpers
+      include AuthenticatedApi::Helpers
 
       def initialize(request)
         @request = request
@@ -41,7 +41,7 @@ module ApiAuth
         if value.nil?
           value = Time.now.utc.httpdate
           @request.headers.merge!({ "DATE" => value })
-        end  
+        end
         value
       end
 

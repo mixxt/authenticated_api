@@ -1,14 +1,14 @@
 # encoding: utf-8
 $:.push File.expand_path("../lib", __FILE__)
 
-require "api_auth/version"
+require "authenticated_api/version"
 
 Gem::Specification.new do |s|
-  s.name = %q{api_auth}
+  s.name = %q{authenticated_api}
   s.summary = %q{Simple HMAC authentication for your APIs}
   s.description = %q{Based on api-auth gem}
-  s.homepage = %q{http://github.com/1st8/api_auth_middleware}
-  s.version = ApiAuth::VERSION
+  s.homepage = %q{http://github.com/1st8/authenticated_api}
+  s.version = AuthenticatedApi::VERSION
   s.authors = ["Christoph Geschwind", "Mauricio Gomes"]
   s.email = "christoph@mixxt.net"
 

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    api_auth (0.9.5)
+    authenticated_api (0.9.5)
       rack
 
 GEM
@@ -38,7 +38,7 @@ PLATFORMS
 DEPENDENCIES
   activesupport
   amatch
-  api_auth!
+  authenticated_api!
   curb
   rack-test
   rest-client

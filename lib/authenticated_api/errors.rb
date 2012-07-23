@@ -1,4 +1,4 @@
-module ApiAuth
+module AuthenticatedApi
   
   # :nodoc:
   class ApiAuthError < StandardError; end
