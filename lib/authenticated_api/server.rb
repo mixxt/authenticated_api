@@ -1,6 +1,8 @@
 module AuthenticatedApi
 
   module Server
+    autoload :Middleware, 'authenticated_api/server/middleware'
+
     # Determines if the request is authentic given the request and the client's
     # secret key. Returns true if the request is authentic and false otherwise.
     def self.authentic?(request, secret_key)

@@ -2,7 +2,6 @@ require 'openssl'
 require 'base64'
 
 require 'authenticated_api/helpers'
-require 'authenticated_api/base'
 
 module AuthenticatedApi
   extend Helpers
