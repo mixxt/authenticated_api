@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    api_auth_middleware (0.9.2)
+    api_auth (0.9.5)
       rack
 
 GEM
@@ -38,7 +38,7 @@ PLATFORMS
 DEPENDENCIES
   activesupport
   amatch
-  api_auth_middleware!
+  api_auth!
   curb
   rack-test
   rest-client

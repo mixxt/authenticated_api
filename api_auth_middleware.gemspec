@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Simple HMAC authentication for your APIs}
   s.description = %q{Based on api-auth gem}
   s.homepage = %q{http://github.com/1st8/api_auth_middleware}
-  s.version = File.read(File.join(File.dirname(__FILE__), 'VERSION'))
+  s.version = ApiAuth::VERSION
   s.authors = ["Christoph Geschwind", "Mauricio Gomes"]
   s.email = "christoph@mixxt.net"
 
