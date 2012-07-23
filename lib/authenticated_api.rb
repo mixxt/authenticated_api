@@ -1,18 +1,26 @@
 require 'openssl'
 require 'base64'
 
-require 'authenticated_api/errors'
 require 'authenticated_api/helpers'
 require 'authenticated_api/base'
 
 module AuthenticatedApi
-  autoload :Headers, 'authenticated_api/headers'
+  extend Helpers
 
-  module RequestDrivers
-    autoload :NetHttpRequest, 'authenticated_api/request_drivers/net_http'
-    autoload :CurbRequest, 'authenticated_api/request_drivers/curb'
-    autoload :RestClientRequest, 'authenticated_api/request_drivers/rest_client'
+  # Generates a Base64 encoded, randomized secret key
+  #
+  # Store this key along with the access key that will be used for
+  # authenticating the client
+  def self.generate_secret_key
+    random_bytes = OpenSSL::Random.random_bytes(512)
+    b64_encode(Digest::SHA2.new(512).digest(random_bytes))
   end
+
+  # :nodoc:
+  class ApiAuthError < StandardError; end
+
+  autoload :Client, 'authenticated_api/client'
+  autoload :Server, 'authenticated_api/server'
 
 end
 
