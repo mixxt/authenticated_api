@@ -21,10 +21,6 @@ describe AuthenticatedApi::Server do
   let(:signed_request) do
   end
 
-  it "should authenticate a valid request"
-
-  it "should NOT authenticate a non-valid request"
-
-  it "should retrieve the access_id"
+  it "should accept signature of valid request"
 
 end
