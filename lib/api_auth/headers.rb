@@ -19,6 +19,8 @@ module ApiAuth
         @request = ActionControllerRequest.new(request)
       when /ActionController::TestRequest/
         @request = ActionControllerRequest.new(request)
+        when /Rack::MockRequest/
+          @request = RackMockRequest.new(request)
       when /ActionDispatch::Request/
         @request = ActionDispatchRequest.new(request)
       else

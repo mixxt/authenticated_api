@@ -40,3 +40,6 @@ pkg
 #
 # For vim:
 #*.swp
+
+# exclude rubymine config
+.idea
