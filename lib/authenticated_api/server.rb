@@ -8,7 +8,7 @@ module AuthenticatedApi
     end
 
     def self.signature_for_request(request, secret)
-      Signature.new(request.request_method, request.host, request.path_info, request.params.except('Signature', 'AccessKeyID')).sign_with(secret)
+      Signature.new(request.request_method, request.host, request.env['REQUEST_PATH'] || request.path_info, request.params.except('Signature', 'AccessKeyID')).sign_with(secret)
     end
   end
 
