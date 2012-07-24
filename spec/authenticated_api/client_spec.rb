@@ -36,6 +36,22 @@ describe AuthenticatedApi::Client do
       response.body.should eq 'Well signed'
     end
 
+    context "empty query" do
+      before do
+        FakeWeb.register_uri(:get, "http://localhost:4000/?Signature=#{signature}&AccessKeyID=#{access_id}", :body => 'Well signed', :status => [200, "OK"])
+      end
+
+      let(:signature) do
+        CGI::escape(AuthenticatedApi::Signature.new('get', 'localhost', '/', {}).sign_with(secret_key))
+      end
+
+      it "generates query" do
+        response = client.request(Net::HTTP::Get.new("/"))
+        response.should be_a Net::HTTPOK
+        FakeWeb.last_request.path.should eq "/?Signature=#{signature}&AccessKeyID=#{access_id}"
+      end
+    end
+
   end
 
 end

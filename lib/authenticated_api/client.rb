@@ -1,3 +1,7 @@
+require 'net/http'
+require 'rack'
+require 'cgi'
+
 module AuthenticatedApi
 
   class Client
@@ -15,7 +19,7 @@ module AuthenticatedApi
       host = @http.address
       signature = Signature.new(request.method, host, changed_uri.path, params).sign_with(@secret)
 
-      changed_uri.query = changed_uri.query + "&Signature=#{CGI::escape(signature)}&AccessKeyID=#{CGI::escape(@access_id)}"
+      changed_uri.query = (changed_uri.query ? "#{changed_uri.query}&" : '') + "Signature=#{CGI::escape(signature)}&AccessKeyID=#{CGI::escape(@access_id)}"
       request.instance_eval do
         @path = changed_uri.to_s
       end
