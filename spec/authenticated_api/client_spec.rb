@@ -32,6 +32,7 @@ describe AuthenticatedApi::Client do
 
     it "returns response" do
       response = client.request(Net::HTTP::Get.new("/?foo=bar"))
+      response.should be_a Net::HTTPOK
       response.body.should eq 'Well signed'
     end
 
