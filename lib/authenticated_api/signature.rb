@@ -19,6 +19,7 @@ module AuthenticatedApi
     end
 
     def sign_with(secret)
+      #puts "Signing #{string_to_sign.inspect} with #{secret.inspect}"
       digest = OpenSSL::Digest::Digest.new('sha256')
       Base64.encode64(OpenSSL::HMAC.digest(digest, secret, string_to_sign)).strip
     end

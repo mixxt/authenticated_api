@@ -1,5 +1,6 @@
 require 'openssl'
 require 'base64'
+require 'active_support/core_ext/hash/except'
 
 require 'authenticated_api/helpers'
 require 'authenticated_api/signature'

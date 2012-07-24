@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.email = "christoph@mixxt.net"
 
   s.add_dependency "rack"
+  s.add_dependency 'activesupport'
 
   s.add_development_dependency "rack-test"
   s.add_development_dependency "rspec"

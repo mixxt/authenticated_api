@@ -2,31 +2,11 @@ require 'spec_helper'
 
 describe AuthenticatedApi::Server::Middleware do
 
-  let(:canonical_string) do
-    "implement"
-  end
-  let(:hmac_signature) do
-    digest = OpenSSL::Digest::Digest.new('sha1')
-    Base64.encode64(OpenSSL::HMAC.digest(digest, secret_key, canonical_string)).strip
-  end
   let(:access_id) do
-    Random.rand(1000)
+    Random.rand(1000).to_s
   end
   let(:secret_key) do
     AuthenticatedApi.generate_secret_key
-  end
-  let(:headers) do
-    {
-        'Content-MD5' => "e59ff97941044f85df5297e1c302d260",
-        'Content-Type' => "text/plain",
-        'Date' => "Mon, 23 Jan 1984 03:29:56 GMT"
-    }
-  end
-  let(:authed_headers) do
-    headers.merge(
-      'Signature' => "#{hmac_signature}",
-      'AccessKeyID' => "#{access_id}"
-    )
   end
   let(:accounts) do
     {access_id => secret_key}
@@ -38,23 +18,26 @@ describe AuthenticatedApi::Server::Middleware do
           [
               200,
               { 'Content-Type' => 'text/plain' },
-              [env['api.authorized'] ? 'authorized' : 'not authorized']
+              [env['signature.valid'] ? 'authorized' : 'not authorized']
           ]
         },
         accounts,
         app_options
     )
   end
+  let(:valid_signature) do
+    AuthenticatedApi::Signature.new('get', 'example.org', '/', {'foo' => 'bar'}).sign_with(secret_key)
+  end
 
   let(:app_options) do
     {}
   end
 
-  it "sets authorized env" do
-    response = post '/', {herp: "derp"}, authed_headers
+  it "sets api.authorized to true if signature is valid" do
+    response = get "/?foo=bar&Signature=#{CGI::escape(valid_signature)}&AccessKeyID=#{access_id}"
     response.body.should eq 'authorized'
   end
-  it "sets not authorized env" do
+  it "sets api.authorized to false if signature is valid" do
     response = get '/'
     response.body.should eq 'not authorized'
   end

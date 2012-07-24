@@ -2,25 +2,27 @@ require 'spec_helper'
 
 describe AuthenticatedApi::Server do
 
-  let(:access_id) do
-    Random.rand(1000)
+  let(:secret) do
+    'secret'
   end
-  let(:secret_key) do
-    AuthenticatedApi.generate_secret_key
+  let(:valid_signature) do
+    AuthenticatedApi::Signature.new('get', 'example.org', '/', {'foo' => 'bar'}).sign_with(secret)
   end
-  let(:headers) do
-    {
-        'Content-MD5' => "e59ff97941044f85df5297e1c302d260",
-        'Content-Type' => "text/plain",
-        'Date' => "Mon, 23 Jan 1984 03:29:56 GMT"
-    }
+  let(:invalid_signature) do
+    AuthenticatedApi::Signature.new('get', 'example.org', '/', {'foo' => 'bar'}).sign_with('I dont know the secret')
   end
-  let(:request) do
+  let(:valid_request) do
+    Rack::Request.new(Rack::MockRequest.env_for("/?foo=bar&Signature=#{CGI::escape(valid_signature)}"))
   end
-
-  let(:signed_request) do
+  let(:invalid_request) do
+    Rack::Request.new(Rack::MockRequest.env_for("/?foo=bar&Signature=#{CGI::escape(invalid_signature)}"))
   end
 
-  it "should accept signature of valid request"
+  it "should accept signature of valid request" do
+    AuthenticatedApi::Server.valid_signature?(valid_request, secret).should be true
+  end
+  it "should not accept signature of invalid request" do
+    AuthenticatedApi::Server.valid_signature?(invalid_request, secret).should be false
+  end
 
 end
