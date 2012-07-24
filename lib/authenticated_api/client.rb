@@ -1,44 +1,26 @@
 module AuthenticatedApi
 
-  module Client
-    extend Helpers
+  class Client
 
-    # Raised when the HTTP request object passed is not supported
-    class UnknownHTTPRequest < StandardError; end
-
-    autoload :Headers, 'authenticated_api/client/headers'
-
-    module RequestDrivers
-      autoload :NetHttpRequest, 'authenticated_api/client/request_drivers/net_http'
-      autoload :CurbRequest, 'authenticated_api/client/request_drivers/curb'
-      autoload :RestClientRequest, 'authenticated_api/client/request_drivers/rest_client'
+    def initialize(host, port, access_id, secret)
+      @http = Net::HTTP.new(host, port)
+      @access_id = access_id.to_s
+      @secret = secret
     end
 
-    # Signs an HTTP request using the client's access id and secret key.
-    # Returns the HTTP request object with the modified headers.
-    #
-    # request: The request can be a Net::HTTP, ActionController::Request,
-    # Curb (Curl::Easy) or a RestClient object.
-    #
-    # access_id: The public unique identifier for the client
-    #
-    # secret_key: assigned secret key that is known to both parties
-    def self.sign!(request, access_id, secret_key)
-      headers = Headers.new(request)
-      headers.sign_header auth_header(request, access_id, secret_key)
-    end
+    def request(request)
+      changed_uri = URI.parse(request.path)
+      post = request.body ? URI.decode_www_form(request.body) : {}
+      params = post.merge(Rack::Utils.parse_nested_query(changed_uri.query))
+      host = @http.address
+      signature = Signature.new(request.method, host, changed_uri.path, params).sign_with(@secret)
 
-    private
+      changed_uri.query = changed_uri.query + "&Signature=#{CGI::escape(signature)}&AccessKeyID=#{CGI::escape(@access_id)}"
+      request.instance_eval do
+        @path = changed_uri.to_s
+      end
 
-    def self.hmac_signature(request, secret_key)
-      headers = Headers.new(request)
-      canonical_string = headers.canonical_string
-      digest = OpenSSL::Digest::Digest.new('sha1')
-      b64_encode(OpenSSL::HMAC.digest(digest, secret_key, canonical_string))
-    end
-
-    def self.auth_header(request, access_id, secret_key)
-      "APIAuth #{access_id}:#{hmac_signature(request, secret_key)}"
+      @http.request(request)
     end
 
   end
