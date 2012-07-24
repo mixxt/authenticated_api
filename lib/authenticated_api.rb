@@ -11,6 +11,10 @@ module AuthenticatedApi
   autoload :Client, 'authenticated_api/client'
   autoload :Server, 'authenticated_api/server'
 
+  def self.generate_secret_key(n = nil)
+    SecureRandom.base64(n)
+  end
+
 end
 
 

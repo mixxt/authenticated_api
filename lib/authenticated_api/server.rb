@@ -4,7 +4,7 @@ module AuthenticatedApi
     autoload :Middleware, 'authenticated_api/server/middleware'
 
     def self.valid_signature?(request, secret)
-      request.params['Signature'] == AuthenticatedApi.signature_for_request(request, secret)
+      request.params['Signature'] == signature_for_request(request, secret)
     end
 
     def self.signature_for_request(request, secret)
