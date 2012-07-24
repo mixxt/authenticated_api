@@ -42,4 +42,17 @@ describe AuthenticatedApi::Server::Middleware do
     response.body.should eq 'not authorized'
   end
 
+  context "with force: true" do
+    let(:app_options) do
+      {force: true}
+    end
+
+    it "returns 403" do
+      response = get '/'
+      response.status.should eq 403
+      response.body.should eq 'Request Signature missing or invalid'
+    end
+
+  end
+
 end

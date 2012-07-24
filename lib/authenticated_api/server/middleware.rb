@@ -12,7 +12,11 @@ module AuthenticatedApi
 
       def call(env)
         env['signature.valid'] = valid?(env)
-        @app.call(env)
+        if @options[:force] && !env['signature.valid']
+          [403, { 'Content-Type' => 'text/plain' }, ['Request Signature missing or invalid']]
+        else
+          @app.call(env)
+        end
       end
 
       def valid?(env)
