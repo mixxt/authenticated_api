@@ -35,7 +35,7 @@ Use the `AuthenticatedApi::Server::Middleware` to verify every incoming request 
     accounts = {
         'my_account' => 'my_shared_secret'
     }
-    # the middleware sets the env['api.authorized'] flag to true if the signature could be verified
+    # the middleware sets the env['signature.valid'] flag to true if the signature could be verified
     use AuthenticatedApi::Server::Middleware,
       accounts,
       {force: true} # if force is set to true it will abort invalid requests with 403 immediately

@@ -33,11 +33,11 @@ describe AuthenticatedApi::Server::Middleware do
     {}
   end
 
-  it "sets api.authorized to true if signature is valid" do
+  it "sets signature.valid to true if signature is valid" do
     response = get "/?foo=bar&Signature=#{CGI::escape(valid_signature)}&AccessKeyID=#{access_id}"
     response.body.should eq 'authorized'
   end
-  it "sets api.authorized to false if signature is invalid" do
+  it "sets signature.valid to false if signature is invalid" do
     response = get '/'
     response.body.should eq 'not authorized'
   end
