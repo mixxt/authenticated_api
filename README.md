@@ -15,6 +15,8 @@ Send a signed request with `Net::HTTP` and `AuthenticatedApi::Client`:
     response = client.request(Net::HTTP::Get.new(file_request))
 ```
 
+Other libraries for sending requests are currently not support, but you can easily generate a signature yourself to use in your request. (See: [Generating Signatures](#generating-signatures))
+
 Verifying a request
 ----
 Use the `AuthenticatedApi::Server` to verify a `Rack::Request`
@@ -41,7 +43,7 @@ Use the `AuthenticatedApi::Server::Middleware` to verify every incoming request 
       {force: true} # if force is set to true it will abort invalid requests with 403 immediately
 ```
 
-Generating the signature for a request by hand
+Generating Signatures
 ----
 If you are using ruby you can use the `AuthenticatedApi::Signature` class to generate a signature:
 
