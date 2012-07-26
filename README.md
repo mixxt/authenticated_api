@@ -1,11 +1,11 @@
-AuthenticatedApi
-====
+# AuthenticatedApi
 AuthenticatedApi is a Gem that helps you with sending and verifying HMAC signed requests.
 The signature algorithm is taken from [Amazons SimpleDB](http://docs.amazonwebservices.com/AmazonSimpleDB/latest/DeveloperGuide/HMACAuth.html)
 but will maybe be changed to the [AWS S3 RestAuthentication](http://s3.amazonaws.com/doc/s3-developer-guide/RESTAuthentication.html) in the future.
 
-Signing a request
-----
+## Usage
+
+### Signing a request
 Send a signed request with `Net::HTTP` and `AuthenticatedApi::Client`:
 
 ```ruby
@@ -17,8 +17,7 @@ Send a signed request with `Net::HTTP` and `AuthenticatedApi::Client`:
 
 Other libraries for sending requests are currently not support, but you can easily generate a signature yourself to use in your request. (See: [Generating Signatures](#generating-signatures))
 
-Verifying a request
-----
+### Verifying a request
 Use the `AuthenticatedApi::Server` to verify a `Rack::Request`
 
 ```ruby
@@ -26,8 +25,7 @@ Use the `AuthenticatedApi::Server` to verify a `Rack::Request`
     AuthenticatedApi::Server.valid_signature?(request, shared_secret)
 ```
 
-Verify with the Middleware
-----
+### Verify with the Middleware
 Use the `AuthenticatedApi::Server::Middleware` to verify every incoming request using a predefined Account Hash
 
 ```ruby
@@ -43,8 +41,7 @@ Use the `AuthenticatedApi::Server::Middleware` to verify every incoming request 
       {force: true} # if force is set to true it will abort invalid requests with 403 immediately
 ```
 
-Generating Signatures
-----
+### Generating Signatures
 If you are using ruby you can use the `AuthenticatedApi::Signature` class to generate a signature:
 
 ```ruby
@@ -55,10 +52,25 @@ If you are using ruby you can use the `AuthenticatedApi::Signature` class to gen
 If you cannot use the Helper class, see the [Amazons SimpleDB](http://docs.amazonwebservices.com/AmazonSimpleDB/latest/DeveloperGuide/HMACAuth.html) developer guide on how to generate a Signature.
 The required params for AuthenticatedApi are Signature and AccessKeyID.
 
-Compatibility
-----
+## Compatibility
 AuthenticatedApi is tested with MRI 1.9.3, nothing else yet.
 
-Origin
-----
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+## TODO
+### Client
+- Add support for other request libraries (curb, rest_client, etc)
+
+### Middleware
+- use proc instead of predefined accounts to determine the shared_secret for AccessKeyID
+- adding of error_app to handle unsigned requests
+
+## Origin
+
 This project is a fork of the [api-auth gem](https://github.com/mgomes/api_auth) gem, but has changed significantly.
