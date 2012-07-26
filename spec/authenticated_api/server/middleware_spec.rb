@@ -37,7 +37,7 @@ describe AuthenticatedApi::Server::Middleware do
     response = get "/?foo=bar&Signature=#{CGI::escape(valid_signature)}&AccessKeyID=#{access_id}"
     response.body.should eq 'authorized'
   end
-  it "sets api.authorized to false if signature is valid" do
+  it "sets api.authorized to false if signature is invalid" do
     response = get '/'
     response.body.should eq 'not authorized'
   end
