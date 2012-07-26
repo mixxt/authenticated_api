@@ -1,7 +1,8 @@
 AuthenticatedApi
 ====
 AuthenticatedApi is a Gem that helps you with sending and verifying HMAC signed requests.
-The signature algorithm is taken from [Amazons SimpleDB](http://docs.amazonwebservices.com/AmazonSimpleDB/latest/DeveloperGuide/HMACAuth.html) but will maybe be changed to the (AWS S3 RestAuthentication)[http://s3.amazonaws.com/doc/s3-developer-guide/RESTAuthentication.html] in the future.
+The signature algorithm is taken from [Amazons SimpleDB](http://docs.amazonwebservices.com/AmazonSimpleDB/latest/DeveloperGuide/HMACAuth.html)
+but will maybe be changed to the [AWS S3 RestAuthentication](http://s3.amazonaws.com/doc/s3-developer-guide/RESTAuthentication.html) in the future.
 
 Signing a request
 ----
@@ -49,7 +50,7 @@ If you are using ruby you can use the `AuthenticatedApi::Signature` class to gen
     AuthenticatedApi::Signature.new('get', 'Example.com', '/', {'something' => 'value'}).sign_with(secret)
 ```
 
-If you cannot use the Helper class, see the [Amazons SimpleDB](http://docs.amazonwebservices.com/AmazonSimpleDB/latest/DeveloperGuide/HMACAuth.html) developer guide on how to generate a Signature.   
+If you cannot use the Helper class, see the [Amazons SimpleDB](http://docs.amazonwebservices.com/AmazonSimpleDB/latest/DeveloperGuide/HMACAuth.html) developer guide on how to generate a Signature.
 The required params for AuthenticatedApi are Signature and AccessKeyID.
 
 Compatibility
