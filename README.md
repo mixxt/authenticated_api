@@ -71,6 +71,9 @@ AuthenticatedApi is tested with MRI 1.9.3, nothing else yet.
 - use proc instead of predefined accounts to determine the shared_secret for AccessKeyID
 - adding of error_app to handle unsigned requests
 
+### Signature
+- Implement [AWS S3 RestAuthentication](http://s3.amazonaws.com/doc/s3-developer-guide/RESTAuthentication.html) algorithm
+
 ## Origin
 
 This project is a fork of the [api-auth gem](https://github.com/mgomes/api_auth) gem, but has changed significantly.
