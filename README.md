@@ -52,6 +52,9 @@ If you are using ruby you can use the `AuthenticatedApi::Signature` class to gen
 If you cannot use the Helper class, see the [Amazons SimpleDB](http://docs.amazonwebservices.com/AmazonSimpleDB/latest/DeveloperGuide/HMACAuth.html) developer guide on how to generate a Signature.
 The required params for AuthenticatedApi are Signature and AccessKeyID.
 
+### Documentation
+http://rubydoc.info/github/mixxt/authenticated_api/master/frames
+
 ## Compatibility
 AuthenticatedApi is tested with MRI 1.9.3, nothing else yet.
 
