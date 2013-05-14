@@ -7,7 +7,7 @@ module AuthenticatedApi
   #    ValueOfHostHeaderInLowercase + "\n" +
   #    HTTPRequestURI + "\n" +
   #    CanonicalizedQueryString <from the preceding step>
-  class Signature < Struct.new(:method, :host, :uri, :params)
+  class Signature < Struct.new(:method, :body_md5, :content_type, :host, :uri, :params)
 
     # Turns the params into a canonicalized string
     # Keys are sorted alphabetically
@@ -27,7 +27,11 @@ module AuthenticatedApi
     #   "GET\nexample.org\n/\nfoo=bar"
     # @return [String] composed string
     def string_to_sign
-      "#{method.upcase}\n#{host.downcase}\n#{uri}#{canonicalized_params}"
+      if content_type.nil?
+        "#{method.upcase}\n#{host.downcase}\n#{uri}#{canonicalized_params}"
+      else
+        "#{method.upcase}\n#{body_md5}\n#{content_type}\n#{host.downcase}\n#{uri}#{canonicalized_params}"
+      end
     end
 
     # Signs the string_to_sign with a given secret
