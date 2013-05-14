@@ -38,7 +38,7 @@ Use the `AuthenticatedApi::Server::Middleware` to verify every incoming request 
     # the middleware sets the env['signature.valid'] flag to true if the signature could be verified
     use AuthenticatedApi::Server::Middleware,
       accounts,
-      {force: true} # if force is set to true it will abort invalid requests with 403 immediately
+      { force: true } # if force is set to true it will abort invalid requests with 403 immediately
 ```
 
 ### Generating Signatures
@@ -46,7 +46,7 @@ If you are using ruby you can use the `AuthenticatedApi::Signature` class to gen
 
 ```ruby
     # params for construtor: method (case insensitive), host (case insensitive), path, params (query/get and body/post)
-    AuthenticatedApi::Signature.new('get', 'Example.com', '/', {'something' => 'value'}).sign_with(secret)
+    AuthenticatedApi::Signature.new('get', Digest::MD5.hexdigest('THE BODY'), 'content/type', 'Example.com', '/', { 'something' => 'value' }).sign_with(secret)
 ```
 
 If you cannot use the Helper class, see the [Amazons SimpleDB](http://docs.amazonwebservices.com/AmazonSimpleDB/latest/DeveloperGuide/HMACAuth.html) developer guide on how to generate a Signature.
