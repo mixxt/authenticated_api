@@ -21,6 +21,10 @@ module AuthenticatedApi
       if request.body
         if StringIO === request.body
           body_str = request.body.string
+        elsif Rack::Lint::InputWrapper === request.body
+          request.body.rewind
+          body_str = request.body.read
+          request.body.rewind
         else
           body_str = request.body.to_s
         end
