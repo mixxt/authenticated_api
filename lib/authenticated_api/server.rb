@@ -19,15 +19,8 @@ module AuthenticatedApi
     def self.signature_for_request(request, secret)
       body_str = ''
       if request.body
-        if StringIO === request.body
-          body_str = request.body.string
-        elsif Rack::Lint::InputWrapper === request.body
-          request.body.rewind
-          body_str = request.body.read
-          request.body.rewind
-        else
-          body_str = request.body.to_s
-        end
+        body_str = request.body.read
+	request.body.rewind
       end
       body_md5 = Digest::MD5.hexdigest(body_str)
       Signature.new(request.request_method, body_md5, request.content_type, request.host, request.env['REQUEST_PATH'] || request.path_info, request.params.except('Signature', 'AccessKeyID')).sign_with(secret)
