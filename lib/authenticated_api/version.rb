@@ -1,4 +1,4 @@
 module AuthenticatedApi
   # Gem version
-  VERSION = '0.3.6'
+  VERSION = '0.4.0'
 end

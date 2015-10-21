@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    authenticated_api (0.3.6)
+    authenticated_api (0.4.0)
       activesupport
       rack
 
