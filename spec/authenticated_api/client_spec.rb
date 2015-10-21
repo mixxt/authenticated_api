@@ -71,6 +71,24 @@ describe AuthenticatedApi::Client do
       end
     end
 
+    context 'with body stream' do
+      before do
+        FakeWeb.register_uri(:post, "http://localhost:4000/?Signature=#{signature}&AccessKeyID=#{access_id}", :body => 'Well signed', :status => [200, 'OK'])
+      end
+
+      let(:signature) do
+        CGI::escape(AuthenticatedApi::Signature.new('post', Digest::MD5.hexdigest('THE BODY'), 'text/plain', 'localhost', '/', {}).sign_with(secret_key))
+      end
+
+      it 'generates query' do
+        post = Net::HTTP::Post.new('/')
+        post.content_type = 'text/plain'
+        post.body_stream = StringIO.new('THE BODY')
+        response = client.request(post)
+        response.should be_a Net::HTTPOK
+        FakeWeb.last_request.path.should eq "/?Signature=#{signature}&AccessKeyID=#{access_id}"
+      end
+    end
   end
 
 end
