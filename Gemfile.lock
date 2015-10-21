@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    authenticated_api (0.3.5)
+    authenticated_api (0.3.6)
       activesupport
       rack
 
@@ -20,7 +20,6 @@ GEM
     amatch (0.2.11)
       tins (~> 0.3)
     builder (3.0.4)
-    curb (0.8.3)
     diff-lcs (1.2.4)
     fakeweb (1.3.0)
     i18n (0.6.1)
@@ -48,8 +47,10 @@ DEPENDENCIES
   activeresource
   amatch
   authenticated_api!
-  curb
   fakeweb
   rack-test
   rest-client
   rspec
+
+BUNDLED WITH
+   1.10.6

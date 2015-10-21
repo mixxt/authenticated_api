@@ -25,7 +25,18 @@ module AuthenticatedApi
     # @return [Net::HTTPResponse] response from Net::HTTP#request
     def request(request)
       changed_uri = URI.parse(request.path)
-      body_md5 = request.body ? Digest::MD5.hexdigest(request.body.to_s) : ''
+      body_md5 = begin
+        if request.body_stream.present?
+          checksum = Digest::MD5.hexdigest(request.body_stream.read)
+          request.body_stream.rewind
+          checksum
+        elsif request.body.present?
+          Digest::MD5.hexdigest(request.body.to_s)
+        else
+          ''
+        end
+      end
+
       params = Rack::Utils.parse_nested_query(changed_uri.query)
       host = @http.address
       signature = Signature.new(request.method, body_md5, request.content_type, host, changed_uri.path, params).sign_with(@secret)
