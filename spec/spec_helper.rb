@@ -9,7 +9,6 @@ require 'rack'
 require 'rack/test'
 require 'amatch'
 require 'rest_client'
-require 'curb'
 require 'fakeweb'
 
 FakeWeb.allow_net_connect = false

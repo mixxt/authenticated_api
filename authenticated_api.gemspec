@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'amatch'
   s.add_development_dependency 'rest-client'
-  s.add_development_dependency 'curb'
   s.add_development_dependency 'fakeweb'
   s.add_development_dependency 'activeresource'
 
