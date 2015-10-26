@@ -39,7 +39,7 @@ module AuthenticatedApi
 
       params = Rack::Utils.parse_nested_query(changed_uri.query)
       host = @http.address
-      signature = Signature.new(request.method, body_md5, request.content_type, host, changed_uri.path, params).sign_with(@secret)
+      signature = Signature.new(request.method, body_md5, request['content-type'], host, changed_uri.path, params).sign_with(@secret)
 
       changed_uri.query = (changed_uri.query ? "#{changed_uri.query}&" : '') + "Signature=#{CGI::escape(signature)}&AccessKeyID=#{CGI::escape(@access_id)}"
       request.instance_eval do

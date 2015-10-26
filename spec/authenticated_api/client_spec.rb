@@ -99,7 +99,7 @@ describe AuthenticatedApi::Client do
 
       let(:signature) do
         request.body_stream.rewind
-        signature = CGI::escape(AuthenticatedApi::Signature.new('post', Digest::MD5.hexdigest(request.body_stream.read), request.content_type, 'localhost', '/', {}).sign_with(secret_key))
+        signature = CGI::escape(AuthenticatedApi::Signature.new('post', Digest::MD5.hexdigest(request.body_stream.read), request['content-type'], 'localhost', '/', {}).sign_with(secret_key))
         request.body_stream.rewind
         signature
       end
