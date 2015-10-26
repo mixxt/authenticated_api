@@ -1,6 +1,8 @@
-require 'spec_helper'
+require 'net/http/post/multipart'
 require 'active_support/core_ext/hash/slice'
 require 'digest/md5'
+
+require 'spec_helper'
 
 describe AuthenticatedApi::Client do
 
@@ -87,6 +89,29 @@ describe AuthenticatedApi::Client do
         response = client.request(post)
         response.should be_a Net::HTTPOK
         FakeWeb.last_request.path.should eq "/?Signature=#{signature}&AccessKeyID=#{access_id}"
+      end
+    end
+
+    context 'with binary multipart/form-data' do
+      let(:request) do
+        Net::HTTP::Post::Multipart.new('/', { 'my_param' => 'my_value', 'file' => UploadIO.new(File.new('./spec/fixtures/test-image.png'), 'image/png', 'other-filename.png') })
+      end
+
+      let(:signature) do
+        request.body_stream.rewind
+        signature = CGI::escape(AuthenticatedApi::Signature.new('post', Digest::MD5.hexdigest(request.body_stream.read), request.content_type, 'localhost', '/', {}).sign_with(secret_key))
+        request.body_stream.rewind
+        signature
+      end
+
+      before do
+        FakeWeb.register_uri(:post, "http://localhost:4000/?Signature=#{signature}&AccessKeyID=#{access_id}", :body => 'Well signed', :status => [200, 'OK'])
+      end
+
+      it 'generates query' do
+        response = client.request(request)
+        expect(response).to be_a Net::HTTPOK
+        expect(FakeWeb.last_request.path).to eq "/?Signature=#{signature}&AccessKeyID=#{access_id}"
       end
     end
   end

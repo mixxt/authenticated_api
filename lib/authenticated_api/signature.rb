@@ -41,7 +41,5 @@ module AuthenticatedApi
       digest = OpenSSL::Digest.new('sha256')
       Base64.encode64(OpenSSL::HMAC.digest(digest, secret, string_to_sign)).strip
     end
-
   end
-
 end

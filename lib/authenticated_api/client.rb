@@ -25,8 +25,9 @@ module AuthenticatedApi
     # @return [Net::HTTPResponse] response from Net::HTTP#request
     def request(request)
       changed_uri = URI.parse(request.path)
-      body_md5 = begin
+      body_md5 =
         if request.body_stream.present?
+          request.body_stream.rewind
           checksum = Digest::MD5.hexdigest(request.body_stream.read)
           request.body_stream.rewind
           checksum
@@ -35,7 +36,6 @@ module AuthenticatedApi
         else
           ''
         end
-      end
 
       params = Rack::Utils.parse_nested_query(changed_uri.query)
       host = @http.address
@@ -48,7 +48,5 @@ module AuthenticatedApi
 
       @http.request(request)
     end
-
   end
-
 end

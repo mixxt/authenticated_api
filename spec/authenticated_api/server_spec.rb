@@ -45,4 +45,25 @@ describe AuthenticatedApi::Server do
     AuthenticatedApi::Server.valid_signature?(invalid_request_with_body, secret).should be_false
   end
 
+  context 'with binary multipart/form-data' do
+    let(:request) do
+      Rack::Request.new(
+        Rack::MockRequest.env_for(
+          '/',
+          {
+            method: :post,
+            params: {
+              file: Rack::Multipart::UploadedFile.new('./spec/fixtures/test-image.png', 'image/png'),
+              another_param: 'another value'
+            },
+            'CONTENT_TYPE' => 'multipart/form-data'
+          }
+        )
+      )
+    end
+
+    it 'should accept signature of valid binary request' do
+      expect(AuthenticatedApi::Server.valid_signature?(valid_request, secret)).to be_true
+    end
+  end
 end

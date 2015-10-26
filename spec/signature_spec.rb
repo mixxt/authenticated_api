@@ -66,6 +66,7 @@ describe AuthenticatedApi::Signature do
       signature.sign_with(secret).should eq ref
     end
   end
+
   context 'with body' do
     let(:signature) do
       AuthenticatedApi::Signature.new('get', Digest::MD5.hexdigest('THE BODY'), 'text/plain', 'Example.com', '/', { 'something' => 'value' })
@@ -97,6 +98,46 @@ describe AuthenticatedApi::Signature do
         signature.content_type = 'application/json'
         signature.sign_with(secret).should_not eq signed_string
       end
+    end
+  end
+
+  context 'with stream body' do
+    let(:request) do
+      Net::HTTP::Post::Multipart.new('/', {
+        file: UploadIO.new('./spec/fixtures/test-image.png', 'image/png', 'image.png'),
+        another_param: 'other param'
+      })
+    end
+
+    let(:signature) do
+      request.body_stream.rewind
+      signature = AuthenticatedApi::Signature.new(request.method, Digest::MD5.hexdigest(request.body_stream.read), request.content_type, 'example.com', request.path, { 'something' => 'value' })
+      request.body_stream.rewind
+      signature
+    end
+
+    let(:signed_string) do
+      signature.sign_with(secret)
+    end
+
+    it 'stores body_md5' do
+      request.body_stream.rewind
+      expect(signature.body_md5).to eq Digest::MD5.hexdigest(request.body_stream.read)
+      request.body_stream.rewind
+    end
+
+    it 'stores content_type' do
+      signature.content_type.should eq request.content_type
+    end
+
+    it 'builds string to sign' do
+      signature.string_to_sign.should eq "POST\n#{signature.body_md5}\nmultipart/form-data\nexample.com\n/something=value"
+    end
+
+    it 'signs with secret' do
+      digest = OpenSSL::Digest::Digest.new('sha256')
+      ref = Base64.encode64(OpenSSL::HMAC.digest(digest, secret, signature.string_to_sign)).strip
+      signature.sign_with(secret).should eq ref
     end
   end
 end
