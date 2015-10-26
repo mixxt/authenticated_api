@@ -9,7 +9,7 @@ module AuthenticatedApi
     # @param [String] secret Shared secret the request should be signed with
     # @return [Boolean] true if the signature is valid
     def self.valid_signature?(request, secret)
-      request.params['Signature'] == signature_for_request(request, secret)
+      request.GET['Signature'] == signature_for_request(request, secret)
     end
 
     # Generates a reference signature for a Rack::Request compatible object with the given secret
@@ -27,7 +27,7 @@ module AuthenticatedApi
           ''
         end
 
-      Signature.new(request.request_method, body_md5, request.content_type, request.host, request.env['REQUEST_PATH'] || request.path_info, request.params.except('Signature', 'AccessKeyID')).sign_with(secret)
+      Signature.new(request.request_method, body_md5, request.content_type, request.host, request.env['REQUEST_PATH'] || request.path_info, request.GET.except('Signature', 'AccessKeyID')).sign_with(secret)
     end
   end
 
